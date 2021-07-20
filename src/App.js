@@ -1,24 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, Fragment } from 'react';
+import Header from './Components/Header';
+import styled from '@emotion/styled';
+import Form from './Components/Form';
+import Summary from './Components/Summary';
+import Result from './Components/Result';
+import Spinner from './Components/Spinner';
+
+const Container = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const FormContainer = styled.div`
+  background-color: #fff;
+  padding: 3rem;
+`;
 
 function App() {
+  const [summary, setSummary] = useState({
+    cotizacion: 0,
+    data: {
+      brand: '',
+      year: '',
+      plan: '',
+    },
+  });
+
+  const [loading, setLoading] = useState(false);
+  const { cotizacion, data } = summary;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Header title='Cotizador de seguros' />
+
+      <FormContainer>
+        <Form setSummary={setSummary} setLoading={setLoading} />
+
+        {loading ? <Spinner /> : null}
+
+        {!loading ? (
+          <Fragment>
+            <Summary data={data} />
+            <Result cotizacion={cotizacion} />
+          </Fragment>
+        ) : null}
+      </FormContainer>
+    </Container>
   );
 }
 
